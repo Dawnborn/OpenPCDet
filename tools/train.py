@@ -5,6 +5,7 @@ import glob
 import os
 from pathlib import Path
 from test import repeat_eval_ckpt
+import pdb
 
 import torch
 import torch.nn as nn
@@ -138,7 +139,7 @@ def main():
     last_epoch = -1
     if args.pretrained_model is not None:
         model.load_params_from_file(filename=args.pretrained_model, to_cpu=dist_train, logger=logger)
-
+    
     if args.ckpt is not None:
         it, start_epoch = model.load_params_with_optimizer(args.ckpt, to_cpu=dist_train, optimizer=optimizer, logger=logger)
         last_epoch = start_epoch + 1
@@ -155,8 +156,9 @@ def main():
                     last_epoch = start_epoch + 1
                     break
                 except:
+                    print("CKPT FAILED!!!")
                     ckpt_list = ckpt_list[:-1]
-
+    # pdb.set_trace()
     model.train()  # before wrap to DistributedDataParallel to support fixed some parameters
     if dist_train:
         model = nn.parallel.DistributedDataParallel(model, device_ids=[cfg.LOCAL_RANK % torch.cuda.device_count()])
@@ -171,7 +173,7 @@ def main():
     # -----------------------start training---------------------------
     logger.info('**********************Start training %s/%s(%s)**********************'
                 % (cfg.EXP_GROUP_PATH, cfg.TAG, args.extra_tag))
-
+    # pdb.set_trace()
     train_model(
         model,
         optimizer,

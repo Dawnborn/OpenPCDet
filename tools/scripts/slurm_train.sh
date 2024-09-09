@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
+#SBATCH --job-name="pcd"
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=12
+#SBATCH --gres=gpu:2,VRAM:16G
+#SBATCH --mem=16G
+#SBATCH --time=24:00:00
+#SBATCH --mail-type=START,END
+#SBATCH --mail-user="ge32hij@mytum.de"
+#SBATCH --output=/storage/user/lhao/hjp/intellisys_data/OpenPCDet/sbatchoutput/logs/slurm-%j.out
+#SBATCH --error=/storage/user/lhao/hjp/intellisys_data/OpenPCDet/sbatchoutput/logs/slurm-%j.out
+
 set -x
 
 PARTITION=$1
